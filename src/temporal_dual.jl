@@ -1,11 +1,11 @@
-mutable struct DualTemporalScheme <: AbstractTemporal
+mutable struct DualTemporal <: AbstractTemporal
     Phys::AbstractTemporal
     Pseudo::AbstractTemporal
 
     m::Integer
     dt::Real
     dtau::Real
-    function DualTemporalScheme(Phys::T, Pseudo::Tau, dt::Real, dtau::Real, pseudo_stage::Integer) where {T<:AbstractTemporal,Tau<:AbstractTemporal}
+    function DualTemporal(Phys::T, Pseudo::Tau, dt::Real, dtau::Real, pseudo_stage::Integer) where {T<:AbstractTemporal,Tau<:AbstractTemporal}
 
         if Phys.explicit
             error("Dual time analysis: Physical time scheme not implicit")

@@ -11,7 +11,7 @@ end
 
 function amplification_factor(lambda::N, X::T) where {T<:RKTemporal, N<:Number}
     e = ones(eltype(X.b), size(X.b))
-    I = LA.UniformScaling(1)
+    I = UniformScaling(1)
     1 + lambda*transpose(X.b)*inv(I - lambda*X.A)*e
 end
 
@@ -21,14 +21,14 @@ function amplification_factor(lambda::Matrix{N}, X::T) where {T<:RKTemporal, N<:
 end
 
 @memoize function amplification_factor_poly(X::T) where {T<:RKTemporal}
-    Lambda, ~ = FGQ.gausslegendre(length(X.b) + 1)
+    Lambda, ~ = gausslegendre(length(X.b) + 1)
     P = amplification_factor.(Lambda, Ref(X))
     Poly.fit(Lambda, P).coeffs
 end
 
 function pseudo_amplification_factor(lambda::N, omega, dt, dtau, X::T) where {T<:RKTemporal, N<:Number}
     e = ones(eltype(X.b), size(X.b))
-    I = LA.UniformScaling(1)
+    I = UniformScaling(1)
     1 + dtau*(lambda - 1/(dt*omega))*transpose(X.b)*inv(I - lambda*X.A)*e
 end
 
@@ -38,6 +38,6 @@ end
 
 function pseudo_source_factor(lambda::N, omega, dtau, X::T) where {T<:RKTemporal, N<:Number}
     e = ones(eltype(X.b), size(X.b))
-    I = LA.UniformScaling(1)
+    I = UniformScaling(1)
     dtau*transpose(X.b)*inv(I - lambda*dtau*X.A)*e
 end

@@ -1,6 +1,6 @@
 function matrixpolyval(p, X::Matrix{T}) where {T<:Number}
-    l, W = LA.eigen(X)
-    L = LA.Diagonal(l)
+    l, W = eigen(X)
+    L = Diagonal(l)
     Y = ones(eltype(X), size(X))*p[1]
     for i=2:length(p)
         Y += p[i]*L^(i-1)
