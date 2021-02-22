@@ -1,7 +1,7 @@
 # PDEFourierAnalysis.jl
 
 This is a package for calculating and plotting the stability regions of
-numerical methods via Fourier analysis. The aim is to provide a many of the
+numerical methods via Fourier analysis. The aim is to provide many of the
 standard quantities of interest in the numerical analysis for spatial,
 temporal and coupled methods.
 
