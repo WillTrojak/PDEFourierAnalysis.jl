@@ -12,6 +12,8 @@ include("utils_matrix.jl")
 include("spatial_base.jl")
 include("spatial_fr.jl")
 include("spatial_fr_adv.jl")
+include("spatial_fr_advdiff.jl")
+include("spatial_fr_advhypediff.jl")
 
 include("rk_tableaux.jl")
 
