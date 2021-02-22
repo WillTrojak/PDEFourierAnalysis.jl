@@ -18,7 +18,7 @@ mutable struct DualTemporalScheme <: TemporalScheme
     end
 end
 
-function amplification_factor(lambda, X::T) where {T<:DualTemporalScheme}
+function amplification_factor(lambda::N, X::T) where {T<:DualTemporalScheme, N<:Number}
     P = pseudo_amplification_factor(lambda, omega(X.Phys), X.dt, X.dtau, X.Pseudo)
     C = pseudo_source_factor(lambda, omega(X.Phys), X.dtau, X.Pseudo)
     S = pseudo_source(lambda, X.dt, X.Phys)

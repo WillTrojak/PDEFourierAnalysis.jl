@@ -9,10 +9,21 @@ function get_RK_scheme(scheme::String)
     return A, vec(b), vec(sum(A, dims=2))
 end
 
-function amplification_factor(lambda, X::T) where {T<:RKTemporalScheme}
+function amplification_factor(lambda::N, X::T) where {T<:RKTemporalScheme, N<:Number}
     e = ones(eltype(X.b), size(X.b))
     I = LA.UniformScaling(1)
     1 + lambda*transpose(X.b)*inv(I - lambda*X.A)*e
+end
+
+function amplification_factor(lambda::Matrix{N}, X::T) where {T<:RKTemporalScheme, N<:Number}
+    P_modes = amplification_factor_poly(X)
+    matrixpolyval(P_modes, lambda)
+end
+
+@memoize function amplification_factor_poly(X::T) where {T<:RKTemporalScheme}
+    Lambda, ~ = FGQ.gausslegendre(length(X.b) + 1)
+    P = amplification_factor.(Lambda, Ref(X))
+    Poly.fit(Lambda, P).coeffs
 end
 
 function pseudo_amplification_factor(lambda::N, omega, dt, dtau, X::T) where {T<:RKTemporalScheme, N<:Number}
@@ -21,11 +32,11 @@ function pseudo_amplification_factor(lambda::N, omega, dt, dtau, X::T) where {T<
     1 + dtau*(lambda - 1/(dt*omega))*transpose(X.b)*inv(I - lambda*X.A)*e
 end
 
-function pseudo_amplification_factor(lambda::Matrix{N}, omega, dt, dtau, X::T) where {T<:RKTemporalScheme, N<:Number}
+#function pseudo_amplification_factor(lambda::Matrix{N}, omega, dt, dtau, X::T) where {T<:RKTemporalScheme, N<:Number}
+#
+#end
 
-end
-
-function pseudo_source_factor(lambda, omega, dtau, X::T) where {T<:RKTemporalScheme}
+function pseudo_source_factor(lambda::N, omega, dtau, X::T) where {T<:RKTemporalScheme, N<:Number}
     e = ones(eltype(X.b), size(X.b))
     I = LA.UniformScaling(1)
     dtau*transpose(X.b)*inv(I - lambda*dtau*X.A)*e
