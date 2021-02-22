@@ -1,0 +1,11 @@
+name = "PDEFourierAnalysis"
+uuid = "5162e4f5-7d22-42e2-9cd5-82e0b23188cb"
+authors = ["Will Trojak <willtrojak@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+FastGaussQuadrature = "442a2c76-b920-505d-bb47-c5924d526838"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Memoize = "c03570c3-d221-55d1-a50c-7939bbd78826"
+Polynomials = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
+SpecialPolynomials = "a25cea48-d430-424a-8ee7-0d3ad3742e9e"
