@@ -1,4 +1,4 @@
-struct AdvFRSpatialScheme <: FRSpatialScheme
+struct AdvFRSpatial <: FRSpatial
     p::Integer
     ns::Integer
     nf::Integer
@@ -15,7 +15,7 @@ struct AdvFRSpatialScheme <: FRSpatialScheme
     C0::Array{AbstractFloat, 2}
     Cm::Array{AbstractFloat, 2}
 
-    function AdvFRSpatialScheme(p::Integer, h, alpha)
+    function AdvFRSpatial(p::Integer, h, alpha)
         ns = p + 1
         nf = 2
 
@@ -26,7 +26,7 @@ struct AdvFRSpatialScheme <: FRSpatialScheme
     end
 end
 
-@memoize function Cmatrices(X::T) where {T<:AdvFRSpatialScheme}
+@memoize function Cmatrices(X::T) where {T<:AdvFRSpatial}
     corr_l_modes = zeros(typeof(X.alpha), X.p + 2)
     corr_r_modes = zeros(typeof(X.alpha), X.p + 2)
     corr_l_modes[X.p + 1] =  ((-1)^X.p)/2
@@ -55,7 +55,7 @@ end
     return Cp, C0, Cm
 end
 
-function Qmatrix(FR::AdvFRSpatialScheme, k)
+function Qmatrix(FR::AdvFRSpatial, k)
     FR.Cp, FR.C0, FR.Cm = adv_fr_Cmatrices(FR)
     -(FR.Cm*exp(-1im*k*FR.h) + FR.Cp*exp(1im*k*FR.h) + FR.C0)*2/FR.h
 end

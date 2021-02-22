@@ -1,1 +1,1 @@
-abstract type SpatialScheme end
+abstract type AbstractSpatial end

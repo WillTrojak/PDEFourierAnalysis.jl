@@ -1,4 +1,4 @@
-struct ERKTemporalScheme <: RKTemporalScheme
+struct ERKTemporalScheme <: RKTemporal
     A::Array{AbstractFloat, 2}
     b::Vector{AbstractFloat}
     c::Vector{AbstractFloat}
