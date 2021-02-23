@@ -1,4 +1,6 @@
-mutable struct AdvHypeDiffFRSpatial <: AdvFRSpatial
+abstract type AbstractAdvHypeDiffFRSpatial <: AbstractAdvFRSpatial end
+
+mutable struct AdvHypeDiffFRSpatial <: AbstractAdvFRSpatial
     p::Integer
     ns::Integer
     nf::Integer

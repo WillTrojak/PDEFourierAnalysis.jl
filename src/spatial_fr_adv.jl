@@ -1,4 +1,6 @@
-mutable struct AdvFRSpatial <: FRSpatial
+abstract type AbstractAdvFRSpatial <: AbstractFRSpatial end
+
+mutable struct AdvFRSpatial <: AbstractAdvFRSpatial
     p::Integer
     ns::Integer
     nf::Integer
@@ -27,7 +29,7 @@ mutable struct AdvFRSpatial <: FRSpatial
 end
 
 
-@memoize function Cmatrices(X::T, alpha) where {T<:AdvFRSpatial}
+@memoize function Cmatrices(X::T, alpha) where {T<:AbstractAdvFRSpatial}
     g_l, g_r = correction_modes(X)
 
     l_l = [SpecialPolynomials.basis.(Legendre, i)(-1) for i=0:X.p]
@@ -48,10 +50,11 @@ function Qmatrix(FR::AdvFRSpatial, k)
 end
 
 function mod_wavenumber(FR::AdvFRSpatial; nk=100, k_min=1e-6, k_max=2*pi)
-    k = LinRange(k_min*(FR.p + 1), k_min*(FR.p + 1), nk)
+    k = LinRange(k_min*(FR.p + 1), k_max*(FR.p + 1), nk)
     C = zeros(ComplexF64, FR.p + 1, nk)
     for i=1:nk
-        C[:, i] = eigvals(Qmatrix(FR, k[i]))
+        C[:, i] = k[i].*eigvals(-Qmatrix(FR, k[i])/(im*k[i]))
     end
+    organise_rows!(C)
     return C, k
 end

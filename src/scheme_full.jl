@@ -1,6 +1,8 @@
-mutable struct FullScheme <: AbstractScheme
+abstract type AbstractFullScheme <: AbstractScheme end
+
+mutable struct FullScheme <: AbstractFullScheme
     X::AbstractSpatial
-    T::abstractTemporal
+    T::AbstractTemporal
     function FullScheme(X::Tx, T::Tt) where {Tx<:AbstractSpatia,Tt<:AbstreactTemporal}
         new(X, T)
     end

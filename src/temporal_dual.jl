@@ -1,4 +1,6 @@
-mutable struct DualTemporal <: AbstractTemporal
+abstract type AbstractDualTemporal <: AbstractTemporal end
+
+mutable struct DualTemporal <: AbstractDualTemporal
     Phys::AbstractTemporal
     Pseudo::AbstractTemporal
 
@@ -18,7 +20,7 @@ mutable struct DualTemporal <: AbstractTemporal
     end
 end
 
-function amplification_factor(lambda::N, X::T) where {T<:DualTemporal, N<:Number}
+function amplification_factor(lambda::N, X::T) where {T<:AbstractDualTemporal, N<:Number}
     P = pseudo_amplification_factor(lambda, omega(X.Phys), X.dt, X.dtau, X.Pseudo)
     C = pseudo_source_factor(lambda, omega(X.Phys), X.dtau, X.Pseudo)
     S = pseudo_source(lambda, X.dt, X.Phys)

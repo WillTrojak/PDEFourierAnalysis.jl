@@ -1,4 +1,6 @@
-mutable struct SDIRKTemporal <: RKTemporal
+abstract type AbstractSDIRKTemporal <: AbstractRKTemporal end
+
+mutable struct SDIRKTemporal <: AbstractRKTemporal
     A::Array{AbstractFloat, 2}
     b::Vector{AbstractFloat}
     c::Vector{AbstractFloat}
@@ -15,7 +17,7 @@ mutable struct SDIRKTemporal <: RKTemporal
     end
 end
 
-function pseudo_source(lambda, dt, X::T) where {T<:SDIRKTemporal}
+function pseudo_source(lambda, dt, X::T) where {T<:AbstractSDIRKTemporal}
     s = 1
     for j=1:X.i-1
         s += X.dt*X.A[X.i,j]*lambda*exp(lambda*X.c[j]*dt)
@@ -23,4 +25,4 @@ function pseudo_source(lambda, dt, X::T) where {T<:SDIRKTemporal}
     s/(dt*X.A[X.i,X.i])
 end
 
-omega(X::T) where {T<:SDIRKTemporal} = X.A[X.i,X.i]
+omega(X::T) where {T<:AbstractSDIRKTemporal} = X.A[X.i,X.i]

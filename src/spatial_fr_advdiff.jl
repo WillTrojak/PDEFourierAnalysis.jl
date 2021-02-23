@@ -1,4 +1,6 @@
-mutable struct AdvDiffFRSpatial <: AdvFRSpatial
+abstract type AbstractAdvDiffFRSpatial <: AbstractAdvFRSpatial end
+
+mutable struct AdvDiffFRSpatial <: AbstractAdvDiffFRSpatial
     p::Integer
     ns::Integer
     nf::Integer
@@ -34,7 +36,7 @@ mutable struct AdvDiffFRSpatial <: AdvFRSpatial
     end
 end
 
-@memoize function Bmatrix(X::T, kappa) where {T<:AdvDiffFRScheme}
+@memoize function Bmatrix(X::T, kappa) where {T<:AbstractAdvDiffFRSpatial}
     Cp, C0, Cm = Cmatrices(X, kappa)
     return Cp*Cp, C0*Cp + Cp*C0, Cm*Cp + C0*C0 + Cp*Cm, Cm*C0 + C0*Cm, Cm*Cm
 end

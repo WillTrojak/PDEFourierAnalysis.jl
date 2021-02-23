@@ -1,5 +1,6 @@
 module PDEFourierAnalysis
 
+using Combinatorics: permutations
 using FastGaussQuadrature
 using LinearAlgebra
 using Memoize
