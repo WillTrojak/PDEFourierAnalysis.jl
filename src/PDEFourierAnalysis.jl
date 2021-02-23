@@ -1,7 +1,7 @@
 module PDEFourierAnalysis
 
 using Combinatorics: permutations
-using FastGaussQuadrature
+using FastGaussQuadrature: gausslegendre
 using LinearAlgebra
 using Memoize
 using Polynomials
