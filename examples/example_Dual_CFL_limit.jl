@@ -10,7 +10,7 @@ dτ = dt/10      # pseudo time step
 
 ERK = PDEFourierAnalysis.ERKTemporal("SSPRK_3")
 DIRK = PDEFourierAnalysis.SDIRKTemporal("SDIRK_33(0.435866)", dirk_stage)
-Dual = PDEFourierAnalysis.DualTemporal(DIRK, ERK, dt, dtau, pseudo_step)
+Dual = PDEFourierAnalysis.DualTemporal(DIRK, ERK, dt, dτ, pseudo_step)
 
 p = 3
 h = 1
