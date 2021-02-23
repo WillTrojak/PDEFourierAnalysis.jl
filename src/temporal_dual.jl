@@ -6,8 +6,8 @@ mutable struct DualTemporal <: AbstractDualTemporal
 
     m::Integer
     dt::Real
-    dtau::Real
-    function DualTemporal(Phys::T, Pseudo::Tau, dt::Real, dtau::Real, pseudo_stage::Integer) where {T<:AbstractTemporal,Tau<:AbstractTemporal}
+    dτ::Real
+    function DualTemporal(Phys::T, Pseudo::Tau, dt::Real, dτ::Real, pseudo_stage::Integer) where {T<:AbstractTemporal,Tau<:AbstractTemporal}
 
         if Phys.explicit
             error("Dual time analysis: Physical time scheme not implicit")
@@ -16,13 +16,13 @@ mutable struct DualTemporal <: AbstractDualTemporal
             error("Dual time analysis: Pseudo time scheme not explicit")
         end
 
-        new(Phys, Pseudo, dt, dtau, pseudo_stage)
+        new(Phys, Pseudo, pseudo_stage, dt, dτ)
     end
 end
 
-function amplification_factor(lambda::N, X::T) where {T<:AbstractDualTemporal, N<:Number}
-    P = pseudo_amplification_factor(lambda, omega(X.Phys), X.dt, X.dtau, X.Pseudo)
-    C = pseudo_source_factor(lambda, omega(X.Phys), X.dtau, X.Pseudo)
-    S = pseudo_source(lambda, X.dt, X.Phys)
-    P^X.m + C*S*(1 - P^X.m)/(1 - P)
+function amplification_factor(λ, X::T) where {T<:AbstractDualTemporal}
+    P = pseudo_amplification_factor(λ, ω(X.Phys), X.dt, X.dτ, X.Pseudo)
+    C = pseudo_source_factor(λ, ω(X.Phys), X.dτ, X.Pseudo)
+    S = pseudo_source(λ, X.dt, X.Phys)
+    P^X.m + inv(UniformScaling(1) - P)*(UniformScaling(1) - P^X.m)*C*S
 end

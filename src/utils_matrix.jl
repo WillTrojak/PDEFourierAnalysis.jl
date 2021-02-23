@@ -8,6 +8,8 @@ function matrixpolyval(p, X::Matrix{T}) where {T<:Number}
     Y = W*Y*inv(W)
 end
 
+spectral_radius(A) = maximum(abs.(eigvals(A)))
+
 perms(a) = reverse(collect(permutations(a)))
 
 function organise_cols!(A::Matrix{T}) where {T<:Number}
