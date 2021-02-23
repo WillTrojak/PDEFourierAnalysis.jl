@@ -23,7 +23,7 @@ end
 @memoize function amplification_factor_poly(X::T) where {T<:AbstractRKTemporal}
     Lambda, ~ = gausslegendre(length(X.b) + 1)
     P = amplification_factor.(Lambda, Ref(X))
-    Poly.fit(Lambda, P).coeffs
+    fit(Lambda, P).coeffs
 end
 
 function pseudo_amplification_factor(lambda::N, omega, dt, dtau, X::T) where {T<:AbstractRKTemporal, N<:Number}

@@ -13,15 +13,20 @@ m = 10
 dt = 1
 dtau = dt/10
 
-#ERK = PDEFourierAnalysis.ERKTemporal("HeunRK_3")
-#DIRK = PDEFourierAnalysis.SDIRKTemporal("SDIRK_33(0.435866)", 1)
-#Dual = PDEFourierAnalysis.DualTemporal(DIRK, ERK, dt, dtau, m)
+ERK = PDEFourierAnalysis.ERKTemporal("SSPRK_3")
+DIRK = PDEFourierAnalysis.SDIRKTemporal("SDIRK_33(0.435866)", 1)
+Dual = PDEFourierAnalysis.DualTemporal(DIRK, ERK, dt, dtau, m)
 
-p = 3
+p = 5
 h = 1
 alpha = 1.
 FR = PDEFourierAnalysis.AdvFRSpatial(p, h, alpha)
-C, k = PDEFourierAnalysis.mod_wavenumber(FR)
+
+P = PDEFourierAnalysis.amplification_factor_poly(ERK)
+
+System = PDEFourierAnalysis.FullScheme(FR, ERK)
+println(PDEFourierAnalysis.CFL_limit(System, n_k=1000, t_tol=1e-7, r_tol=1e-7))
+#C, k = PDEFourierAnalysis.mod_wavenumber(FR)
 
 #n_lx = 1000
 #n_ly = 1001

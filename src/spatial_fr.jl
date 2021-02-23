@@ -23,3 +23,5 @@ abstract type AbstractFRSpatial <: AbstractSpatial end
     g_r = convert(Legendre, g_r_mono).coeffs
     return g_l, g_r
 end
+
+@memoize nyquist_wavenumber(X::T) where {T<:AbstractFRSpatial} = pi*(X.p + 1)/X.h
