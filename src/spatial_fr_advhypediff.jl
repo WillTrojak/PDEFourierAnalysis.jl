@@ -44,3 +44,9 @@ function Qmatrix(FR::AdvHypeDiffFRSpatial, k)
     Q[FR.ns+1:2FR.ns, FR.ns+1:2FR.ns] += UniformScaling(1/FR.T_r)
     return Q
 end
+
+function t_derivative_switch(FR::AdvHypeDiffFRSpatial)
+    A = zeros(2FR.ns,2FR.ns) + UniformScaling(1)
+    A[FR.ns+1:2FR.ns, FR.ns+1:2FR.ns] -= UniformScaling(1)
+    return A
+end

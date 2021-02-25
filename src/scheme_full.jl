@@ -3,12 +3,18 @@ abstract type AbstractFullScheme <: AbstractScheme end
 mutable struct FullScheme <: AbstractFullScheme
     X::AbstractSpatial
     T::AbstractTemporal
+
+    CFL::Number
     function FullScheme(X::Tx, T::Tt) where {Tx<:AbstractSpatial,Tt<:AbstractTemporal}
+
         new(X, T)
     end
 end
 
-CFL_limit(F::T; kwargs...) where {T<:AbstractFullScheme} = CFL_limit(F.X, F.T; kwargs...)
+function CFL_limit(F::T; kwargs...) where {T<:AbstractFullScheme}
+    F.CFL = CFL_limit(F.X, F.T; kwargs...)
+    return F.CFL
+end
 
 function CFL_limit_ic(X::T; kwargs...) where {T<:AbstractSpatial}
     return Dict([("t0", haskey(kwargs, :t_start) ? getindex(kwargs, :t_start) : 1e-5),
@@ -27,7 +33,7 @@ function CFL_limit(X::Tx, T::Tt; kwargs...) where {Tx<:AbstractFRSpatial,Tt<:Abs
             ρ = spectral_radius(amplification_factor(t*Qmatrix(X, k), T))
             ρ_max = max(ρ_max, ρ)
         end
-        return rho_max
+        return ρ_max
     end
 
     ic = CFL_limit_ic(X; kwargs...)

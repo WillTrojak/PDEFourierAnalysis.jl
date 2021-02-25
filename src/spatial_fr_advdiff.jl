@@ -45,6 +45,8 @@ function Qmatrix(FR::AdvDiffFRSpatial, k)
     FR.Cp, FR.C0, FR.Cm = Cmatrices(FR, FR.alpha)
     FR.Bp2, FR.Bp1, FR.B0, FR.Bm1, FR.Bm2 = Bmatrix(FR, FR.kappa)
     Qa = -(FR.Cm*exp(-1im*k*FR.h) + FR.Cp*exp(1im*k*FR.h) + FR.C0)*2/FR.h
-    Qd = 4(FR.Bm2*exp(-im*k*2h) + FR.Bm1*exp(-im*k*h)+ FR.Bp2*exp(im*k*2h) + FR.Bp1*exp(im*k*h) + B0)/(FR.h*FR.h)
-    2Qa - 4*FR.nu*Qd
+    Qd = -(FR.Bm2*exp(-im*k*2FR.h) + FR.Bm1*exp(-im*k*FR.h)+ FR.Bp2*exp(im*k*2FR.h) + FR.Bp1*exp(im*k*FR.h) + FR.B0)*4/(FR.h*FR.h)
+    Qa - FR.nu*Qd
 end
+
+t_derivative_switch(FR::AdvDiffFRSpatial) = UniformScaling(1)

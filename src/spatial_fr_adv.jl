@@ -58,3 +58,5 @@ function mod_wavenumber(FR::AdvFRSpatial; nk=100, k_min=1e-6, k_max=2*pi)
     organise_rows!(C)
     return C, k
 end
+
+t_derivative_switch(FR::AdvFRSpatial) = UniformScaling(1)
