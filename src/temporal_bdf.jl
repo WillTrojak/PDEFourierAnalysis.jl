@@ -12,17 +12,17 @@ mutable struct BDFTemporal <: AbstractBDFTemporal
     end
 end
 
-function pseudo_source(λ::N, dt, X::T) where {T<:AbstractSDIRKTemporal,N<:Number}
+function pseudo_source(λ::N, dt, X::T) where {T<:AbstractBDFTemporal,N<:Number}
     s = 0
-    for j=0:length(X.B)-1
+    for j=0:length(X.B)-2
         s -= X.B[j+2]*exp(-j*λ*dt)
     end
     s/(dt*X.B[1])
 end
 
-function pseudo_source(Λ::Matrix{N}, dt, X::T) where {T<:AbstractSDIRKTemporal,N<:Number}
+function pseudo_source(Λ::Matrix{N}, dt, X::T) where {T<:AbstractBDFTemporal,N<:Number}
     s = zeros(size(Λ))
-    for j=0:length(X.B)-1
+    for j=0:length(X.B)-2
         s -= X.B[j+2]*exp(-j*Λ*dt)
     end
     s/(dt*X.B[1])

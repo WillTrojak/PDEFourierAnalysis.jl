@@ -57,7 +57,8 @@ function CFL_limit(X::Tx, T::Tt; kwargs...) where {Tx<:AbstractFRSpatial,Tt<:Abs
     function max_spectral_radius(t, K, X, T)
         ρ_max = 0.
         for k in K
-            ρ = spectral_radius(amplification_factor(Qmatrix(X, k), T))
+            Q = Qmatrix(X, k)
+            ρ = spectral_radius(amplification_factor(Q, T))/spectral_radius(pseudo_source(Q, T.dt, T.Phys))
             ρ_max = max(ρ_max, ρ)
         end
         return ρ_max
@@ -74,9 +75,10 @@ function CFL_limit(X::Tx, T::Tt; kwargs...) where {Tx<:AbstractFRSpatial,Tt<:Abs
     while t1 - t0 > get(ic, "t_tol", 0)
         t2 = (t1 + t0)/2
         T.dτ = t2
-        rho_2 = max_spectral_radius(t2, K, X, T)
-        t1 = rho_2 >= 1+r_tol ? t2 : t1
-        t0 = rho_2 >= 1+r_tol ? t0 : t2
+        ρ_2 = max_spectral_radius(t2, K, X, T)
+        t1 = ρ_2 >= 1+r_tol ? t2 : t1
+        t0 = ρ_2 >= 1+r_tol ? t0 : t2
+        println("t0 = $t0, t1 = $t1, ρ = $ρ_2")
     end
     T.dτ = dτ_temp
 
