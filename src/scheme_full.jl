@@ -78,7 +78,6 @@ function CFL_limit(X::Tx, T::Tt; kwargs...) where {Tx<:AbstractFRSpatial,Tt<:Abs
         ρ_2 = max_spectral_radius(t2, K, X, T)
         t1 = ρ_2 >= 1+r_tol ? t2 : t1
         t0 = ρ_2 >= 1+r_tol ? t0 : t2
-        println("t0 = $t0, t1 = $t1, ρ = $ρ_2")
     end
     T.dτ = dτ_temp
 
