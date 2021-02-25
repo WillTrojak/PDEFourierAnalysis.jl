@@ -1,6 +1,6 @@
 abstract type AbstractAdvHypeDiffFRSpatial <: AbstractAdvFRSpatial end
 
-mutable struct AdvHypeDiffFRSpatial <: AbstractAdvFRSpatial
+mutable struct AdvHypeDiffFRSpatial <: AbstractAdvHypeDiffFRSpatial
     p::Integer
     ns::Integer
     nf::Integer
@@ -35,12 +35,12 @@ mutable struct AdvHypeDiffFRSpatial <: AbstractAdvFRSpatial
 end
 
 function Qmatrix(FR::AdvHypeDiffFRSpatial, k)
-    FR.Cp_a, FR.C0_a, FR.Cm_a = Cmatrix(FR, FR.alpha)
-    FR.Cp_d, FR.C0_d, FR.Cm_d = Cmatrix(FR, FR.kappa)
-    Q = zeros(2FR.ns, 2FR.ns)
+    FR.Cp_a, FR.C0_a, FR.Cm_a = Cmatrices(FR, FR.alpha)
+    FR.Cp_d, FR.C0_d, FR.Cm_d = Cmatrices(FR, FR.kappa)
+    Q = zeros(Complex{AbstractFloat}, 2FR.ns, 2FR.ns)
     Q[1:FR.ns, 1:FR.ns] += -(FR.Cm_a*exp(-1im*k*FR.h) + FR.Cp_a*exp(1im*k*FR.h) + FR.C0_a)*2/FR.h
     Q[1:FR.ns, FR.ns+1:2FR.ns] += FR.nu*(FR.Cm_a*exp(-1im*k*FR.h) + FR.Cp_a*exp(1im*k*FR.h) + FR.C0_a)*2/FR.h
-    Q[FR.ns+1:2FR.ns, 1:FR.ns] += (FR.Cm_a*exp(-1im*k*FR.h) + FR.Cp_a*exp(1im*k*FR.h) + FR.C0_a)*2/(FR.h*FR.T_r)
+    Q[FR.ns+1:2FR.ns, 1:FR.ns] += (FR.Cm_d*exp(-1im*k*FR.h) + FR.Cp_d*exp(1im*k*FR.h) + FR.C0_d)*2/(FR.h*FR.T_r)
     Q[FR.ns+1:2FR.ns, FR.ns+1:2FR.ns] += UniformScaling(1/FR.T_r)
     return Q
 end
