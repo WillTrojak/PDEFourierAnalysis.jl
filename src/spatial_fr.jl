@@ -6,8 +6,8 @@ abstract type AbstractFRSpatial <: AbstractSpatial end
 @memoize X2Pmatrix(X::T) where {T<:AbstractFRSpatial} = inv(P2Xmatrix(X))
 
 @memoize function correction_modes(X::T) where {T<:AbstractFRSpatial}
-    corr_l_modes = zeros(eltype(X.xs_ref), X.p + 2)
-    corr_r_modes = zeros(eltype(X.xs_ref), X.p + 2)
+    corr_l_modes = zeros(X.p + 2)
+    corr_r_modes = zeros(X.p + 2)
     corr_l_modes[X.p + 1] =  ((-1)^X.p)/2
     corr_l_modes[X.p + 2] = -((-1)^X.p)/2
     corr_r_modes[X.p + 1] = 1/2

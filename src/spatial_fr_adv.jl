@@ -44,16 +44,21 @@ end
     return Cp, C0, Cm
 end
 
-function Qmatrix(FR::AdvFRSpatial, k)
+function Qmatrix(FR::AdvFRSpatial, k, trim=false)
     FR.Cp, FR.C0, FR.Cm = Cmatrices(FR, FR.alpha)
+    if trim
+        FR.Cp = f64trim(convert(Matrix{Float64}, FR.Cp))
+        FR.C0 = f64trim(convert(Matrix{Float64}, FR.C0))
+        FR.Cm = f64trim(convert(Matrix{Float64}, FR.Cm))
+    end
     -(FR.Cm*exp(-1im*k*FR.h) + FR.Cp*exp(1im*k*FR.h) + FR.C0)*2/FR.h
 end
 
-function mod_wavenumber(FR::AdvFRSpatial; nk=100, k_min=1e-6, k_max=2*pi)
+function mod_wavenumber(FR::AdvFRSpatial; nk=100, k_min=1e-6, k_max=2*pi, trim=false)
     k = LinRange(k_min*(FR.p + 1), k_max*(FR.p + 1), nk)
     C = zeros(ComplexF64, FR.p + 1, nk)
     for i=1:nk
-        C[:, i] = k[i].*eigvals(-Qmatrix(FR, k[i])/(im*k[i]))
+        C[:, i] = k[i].*eigvals(-Qmatrix(FR, k[i], trim)/(im*k[i]))
     end
     organise_rows!(C)
     return C, k

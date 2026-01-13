@@ -40,3 +40,8 @@ function closest(a, b)
     end
     return c
 end
+
+function f64trim(A::Matrix{Float64})
+    mask32(x::Float64) = reinterpret(Float64, reinterpret(UInt64, x) & UInt64(0xffff_ffff_0000_0000))
+    return mask32.(A)
+end
